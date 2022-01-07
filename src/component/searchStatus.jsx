@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
 const SearchStatus = ({ length }) => {
     const handlePhrase = (number) => {
-        // console.log('SearchStatus', number)
+        console.log('SearchStatus', number);
 
         let prefix;
         if (number === 0) {
-            prefix = "Никто не тусанет";
+            prefix = 'Никто не тусанет';
         } else {
-            let digit = +number.toString().split("").pop();
+            const digit = +number.toString().split('').pop();
             switch (digit) {
                 case 0:
                 case 1:
@@ -30,7 +30,7 @@ const SearchStatus = ({ length }) => {
                     break;
             }
 
-            let lastTwoDigits = number.toString().slice(-2);
+            const lastTwoDigits = +number.toString().slice(-2);
             switch (lastTwoDigits) {
                 case 11:
                 case 12:
@@ -42,12 +42,18 @@ const SearchStatus = ({ length }) => {
                 default:
                     break;
             }
-
-            // console.log(number.toString(), number.toString().slice(-1));
         }
 
         const phrase = `${prefix} с тобой сегодня`;
-        return <span className="badge btn-primary m-2">{phrase}</span>;
+        return (
+            <h1>
+                <span
+                    className={'badge ' + (Number(number) > 0 ? 'bg-primary' : 'bg-danger')}
+                >
+                    {phrase}
+                </span>
+            </h1>
+        );
     };
 
     return handlePhrase(length);

@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Bookmark = ({ status, id, ...rest }) => {
     const draw = () => {
@@ -17,7 +17,7 @@ const Bookmark = ({ status, id, ...rest }) => {
                 height="16"
                 fill="currentColor"
                 className={
-                    status === true ? "bi bi-bookmark" : "bi bi-bookmark-fill"
+                    status === true ? 'bi bi-bookmark' : 'bi bi-bookmark-fill'
                 }
                 onClick={() => rest.onChangeBookmark(id)}
                 viewBox="0 0 16 16"

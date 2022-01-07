@@ -1,7 +1,7 @@
-import React from "react";
-import Qualities from "./qualities";
-import Bookmark from "./bookmark";
-import PropTypes from "prop-types";
+import React from 'react';
+import Qualities from './qualities';
+// import Bookmark from './bookmark';
+import PropTypes from 'prop-types';
 
 const User = (user, { ...rest }) => {
     return (
