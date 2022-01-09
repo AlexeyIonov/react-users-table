@@ -2,45 +2,43 @@ import React from 'react';
 
 const SearchStatus = ({ length }) => {
     const handlePhrase = (number) => {
-        console.log('SearchStatus', number);
-
         let prefix;
         if (number === 0) {
             prefix = 'Никто не тусанет';
         } else {
             const digit = +number.toString().split('').pop();
             switch (digit) {
-                case 0:
-                case 1:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9: {
-                    prefix = `${number} человек тусанет`;
-                    break;
-                }
-                case 2:
-                case 3:
-                case 4: {
-                    prefix = `${number} человека тусанет`;
-                    break;
-                }
-                default:
-                    break;
+            case 0:
+            case 1:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9: {
+                prefix = `${number} человек тусанет`;
+                break;
+            }
+            case 2:
+            case 3:
+            case 4: {
+                prefix = `${number} человека тусанет`;
+                break;
+            }
+            default:
+                break;
             }
 
             const lastTwoDigits = +number.toString().slice(-2);
             switch (lastTwoDigits) {
-                case 11:
-                case 12:
-                case 13:
-                case 14: {
-                    prefix = `${number} человек тусанет`;
-                    break;
-                }
-                default:
-                    break;
+            case 11:
+            case 12:
+            case 13:
+            case 14: {
+                prefix = `${number} человек тусанет`;
+                break;
+            }
+            default:
+                break;
             }
         }
 

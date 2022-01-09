@@ -1,32 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import User from './user';
 import PropTypes from 'prop-types';
-import Bookmark from './bookmark';
 import Pagination from './pagination';
 import { paginate } from '../utils/paginate';
 import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import api from '../api';
+import UsersTable from './usersTable';
+import _ from 'lodash';
 
-const Users = ({ users, ...rest }) => {
-    const pageSize = 2;
+const Users = () => {
+    const pageSize = 8;
+    const [users, setUsers] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProfession, setSelectedProfession] = useState();
-    const filteredUsers = selectedProfession
-        ? users.filter(
-              (user) =>
-                  JSON.stringify(user.profession) ===
-                  JSON.stringify(selectedProfession)
-          )
-        : users;
-    console.log('selectedProfession', selectedProfession);
-    const usersOnPage = paginate(filteredUsers, currentPage, pageSize);
-    const countOfFilteredUsers = filteredUsers.length;
-    rest.onChangeDisplayedUsers(countOfFilteredUsers);
+    const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
 
     useEffect(() => {
-        console.log('render');
+        api.users.fetchAll().then((data) => {
+            setUsers(data);
+        });
+    }, []);
+
+    const handleDelete = (userId) => {
+        setUsers((prevState) => prevState.filter((tag) => tag._id !== userId));
+    };
+
+    const handleToggleBookmark = (id) => {
+        // console.log('handleToggleBookmark', id);
+
+        const newUsers = users.map((user) => {
+            if (user._id === id) {
+                user.bookmark === false
+                    ? (user.bookmark = true)
+                    : (user.bookmark = false);
+            }
+            return user;
+        });
+        setUsers(newUsers);
+    };
+
+    useEffect(() => {
+        // console.log('render');
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
 
@@ -35,12 +50,10 @@ const Users = ({ users, ...rest }) => {
     }, [selectedProfession]);
 
     const handlePageChange = (pageIndex) => {
-        // console.log('handlePageChange', pageIndex);
         setCurrentPage(pageIndex);
     };
 
     const handleProfessionSelect = (item) => {
-        console.log('handleProfessionSelect', item);
         setSelectedProfession(item);
     };
 
@@ -48,27 +61,9 @@ const Users = ({ users, ...rest }) => {
         setSelectedProfession();
     };
 
-    console.log(professions);
-
-    const renderTableContent = () => {
-        return usersOnPage.map((user) => (
-            <User
-                {...user}
-                {...rest}
-                key={user._id}
-                buttonDelete={
-                    <button
-                        onClick={() => rest.onDeleteUser(user._id)}
-                        className="btn btn-danger btn-sm"
-                    >
-                        Удалить
-                    </button>
-                }
-                bookmarkIcon={
-                    <Bookmark status={user.bookmark} id={user._id} {...rest} />
-                }
-            />
-        ));
+    const handleSort = (item) => {
+        // console.log('Users: handleSort', item);
+        setSortBy(item);
     };
 
     const renderGroupListBox = () => {
@@ -89,9 +84,9 @@ const Users = ({ users, ...rest }) => {
         );
     };
 
-    const renderUsers = () => {
+    const renderUsers = (usersOnPage, countOfFilteredUsers) => {
         return (
-            <div className="d-flex">
+            <div className="d-flex p-3">
                 {professions && (
                     <div className="d-flex flex-column flex-shrink-0">
                         {renderGroupListBox()}
@@ -100,20 +95,13 @@ const Users = ({ users, ...rest }) => {
                 {countOfFilteredUsers >= 0 && (
                     <div className="d-flex flex-column m-2">
                         {<SearchStatus length={countOfFilteredUsers} />}
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Имя</th>
-                                    <th scope="col">Качества</th>
-                                    <th scope="col">Профессия</th>
-                                    <th scope="col">Встретился, раз</th>
-                                    <th scope="col">Оценка</th>
-                                    <th scope="col">Избранное</th>
-                                    <th scope="col">{/* Delete button */}</th>
-                                </tr>
-                            </thead>
-                            <tbody>{renderTableContent()}</tbody>
-                        </table>
+                        {<UsersTable
+                            users={usersOnPage}
+                            onSort={handleSort}
+                            selectedSort={sortBy}
+                            onToggleBookmark={handleToggleBookmark}
+                            onDeleteUser={handleDelete}
+                        />}
                         <div className="d-flex justify-content-center">
                             <Pagination
                                 itemsCount={countOfFilteredUsers}
@@ -128,13 +116,23 @@ const Users = ({ users, ...rest }) => {
         );
     };
 
-    return renderUsers();
+    if (users) {
+        const filteredUsers = selectedProfession ? users.filter(
+            (user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)
+        ) : users;
+        const sortedUsers = _.orderBy(filteredUsers, sortBy.path, sortBy.order);
+        const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
+        const countOfFilteredUsers = filteredUsers.length;
+        return renderUsers(usersOnPage, countOfFilteredUsers);
+    }
+    else {
+        return 'loading...';
+    }
 };
 
 Users.propTypes = {
     users: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    rest: PropTypes.func,
-    onChangeDisplayedUsers: PropTypes.func
+    onToggleBookmark: PropTypes.func
 };
 
 export default Users;
