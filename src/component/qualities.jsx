@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Qualities = ({ color, name, id }) => {
     return (
@@ -6,6 +7,12 @@ const Qualities = ({ color, name, id }) => {
             {name}
         </span>
     );
+};
+
+Qualities.propTypes = {
+    color: PropTypes.PropTypes.string,
+    name: PropTypes.PropTypes.string,
+    id: PropTypes.PropTypes.string
 };
 
 export default Qualities;

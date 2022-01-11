@@ -1,35 +1,38 @@
 import React from 'react';
 import Qualities from './qualities';
-// import Bookmark from './bookmark';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
-const User = (user, { ...rest }) => {
+const User = ({ user }) => {
+    const history = useHistory();
+    const handleUsersRoute = () => {
+        history.push('/users');
+    };
     return (
-        <tr key={user._id}>
-            <td>{user.name}</td>
-            <td>
-                {user.qualities.map((usr) => (
-                    <Qualities
-                        key={usr._id}
-                        color={usr.color}
-                        name={usr.name}
-                        id={usr._id}
-                    />
-                ))}
-            </td>
-            <td>{user.profession.name}</td>
-            <td>{user.completedMeetings}</td>
-            <td>{user.rate}/5</td>
-            {/* <td>{<Bookmark status={user.bookmark} id={user._id} {...rest}/>}</td> */}
-            <td>{user.bookmarkIcon}</td>
-            <td>{user.buttonDelete}</td>
-        </tr>
+        user ? (<div className='d-flex justify-content-center'>
+            <div>
+                <h3>{user.name}</h3>
+                <h1>Профессия: {user.profession.name}</h1>
+                <div>
+                    {user.qualities.map((u) => (
+                        <Qualities
+                            key={u._id}
+                            color={u.color}
+                            name={u.name}
+                            id={u._id}
+                        />
+                    ))}
+                </div>
+                <h1>Встретился: {user.completedMeetings}</h1>
+                <h1>Рейтинг: {user.rate}/5</h1>
+                <button onClick={handleUsersRoute}>Все пользователи</button>
+            </div>
+        </div>) : (<div className='d-flex justify-content-center'>Загрузка данных о пользователе</div>)
     );
 };
 
 User.propTypes = {
-    user: PropTypes.object,
-    rest: PropTypes.func
+    user: PropTypes.object
 };
 
 export default User;

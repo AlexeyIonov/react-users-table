@@ -6,21 +6,30 @@ import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import api from '../api';
 import UsersTable from './usersTable';
+import User from './user';
 import _ from 'lodash';
 
-const Users = () => {
+const Users = ({ match }) => {
     const pageSize = 8;
     const [users, setUsers] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProfession, setSelectedProfession] = useState();
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
+    const userId = match.params.userId;
+    const [userToRender, setUserToRender] = useState();
 
     useEffect(() => {
         api.users.fetchAll().then((data) => {
             setUsers(data);
         });
     }, []);
+
+    useEffect(() => {
+        api.users.getById(userId).then((data) => {
+            setUserToRender(data);
+        });
+    }, [userId]);
 
     const handleDelete = (userId) => {
         setUsers((prevState) => prevState.filter((tag) => tag._id !== userId));
@@ -86,7 +95,7 @@ const Users = () => {
 
     const renderUsers = (usersOnPage, countOfFilteredUsers) => {
         return (
-            <div className="d-flex p-3">
+            <div className="d-flex justify-content-center p-3">
                 {professions && (
                     <div className="d-flex flex-column flex-shrink-0">
                         {renderGroupListBox()}
@@ -117,21 +126,25 @@ const Users = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProfession ? users.filter(
-            (user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)
-        ) : users;
-        const sortedUsers = _.orderBy(filteredUsers, sortBy.path, sortBy.order);
-        const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
-        const countOfFilteredUsers = filteredUsers.length;
-        return renderUsers(usersOnPage, countOfFilteredUsers);
-    }
-    else {
-        return 'loading...';
+        if (userId) {
+            // console.log('UserId', userId, userToRender);
+            return <User user={userToRender}/>;
+        } else {
+            const filteredUsers =
+                selectedProfession ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)) : users;
+            const sortedUsers = _.orderBy(filteredUsers, sortBy.path, sortBy.order);
+            const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
+            const countOfFilteredUsers = filteredUsers.length;
+            return renderUsers(usersOnPage, countOfFilteredUsers);
+        }
+    } else {
+        return <h1 className='d-flex justify-content-center'>Loading ...</h1>;
     }
 };
 
 Users.propTypes = {
     users: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    match: PropTypes.object,
     onToggleBookmark: PropTypes.func
 };
 
