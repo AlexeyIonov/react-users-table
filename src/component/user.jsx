@@ -9,25 +9,27 @@ const User = ({ user }) => {
         history.push('/users');
     };
     return (
-        user ? (<div className='d-flex justify-content-center'>
-            <div>
-                <h3>{user.name}</h3>
-                <h1>Профессия: {user.profession.name}</h1>
+        user
+            ? (<div className='d-flex justify-content-center'>
                 <div>
-                    {user.qualities.map((u) => (
-                        <Qualities
-                            key={u._id}
-                            color={u.color}
-                            name={u.name}
-                            id={u._id}
-                        />
-                    ))}
+                    <h3>{user.name}</h3>
+                    <h1>Профессия: {user.profession.name}</h1>
+                    <div className='d-flex justify-content-center'>
+                        {user.qualities.map((u) => (
+                            <Qualities
+                                key={u._id}
+                                color={u.color}
+                                name={u.name}
+                                id={u._id}
+                            />
+                        ))}
+                    </div>
+                    <h1>Встретился: {user.completedMeetings}</h1>
+                    <h1>Рейтинг: {user.rate}/5</h1>
+                    <button onClick={handleUsersRoute}>Все пользователи</button>
                 </div>
-                <h1>Встретился: {user.completedMeetings}</h1>
-                <h1>Рейтинг: {user.rate}/5</h1>
-                <button onClick={handleUsersRoute}>Все пользователи</button>
-            </div>
-        </div>) : (<div className='d-flex justify-content-center'>Загрузка данных о пользователе</div>)
+            </div>)
+            : (<div className='d-flex justify-content-center'>Загрузка данных о пользователе</div>)
     );
 };
 
