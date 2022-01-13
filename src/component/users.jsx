@@ -8,6 +8,7 @@ import api from '../api';
 import UsersTable from './usersTable';
 import User from './user';
 import _ from 'lodash';
+import SearchUsers from './searchUsers';
 
 const Users = ({ match }) => {
     const pageSize = 8;
@@ -18,6 +19,7 @@ const Users = ({ match }) => {
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
     const userId = match.params.userId;
     const [userToRender, setUserToRender] = useState();
+    const [searchByName, setSearchByName] = useState();
 
     useEffect(() => {
         api.users.fetchAll().then((data) => {
@@ -75,6 +77,11 @@ const Users = ({ match }) => {
         setSortBy(item);
     };
 
+    const handleSearch = (item) => {
+        console.log('onSearch:', item);
+        setSearchByName(item);
+    };
+
     const renderGroupListBox = () => {
         return (
             <>
@@ -103,7 +110,8 @@ const Users = ({ match }) => {
                 )}
                 {countOfFilteredUsers >= 0 && (
                     <div className="d-flex flex-column m-2">
-                        {<SearchStatus length={countOfFilteredUsers} />}
+                        {<SearchStatus length={countOfFilteredUsers}/>}
+                        {<SearchUsers onSearch={handleSearch}/>}
                         {<UsersTable
                             users={usersOnPage}
                             onSort={handleSort}
@@ -125,6 +133,13 @@ const Users = ({ match }) => {
         );
     };
 
+    const filterUserByName = (arr, query) => {
+        console.log('filterItems', arr, query);
+        return arr.filter((el) => {
+            return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+    };
+
     if (users) {
         if (userId) {
             // console.log('UserId', userId, userToRender);
@@ -132,7 +147,9 @@ const Users = ({ match }) => {
         } else {
             const filteredUsers =
                 selectedProfession ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)) : users;
-            const sortedUsers = _.orderBy(filteredUsers, sortBy.path, sortBy.order);
+            const seachedUsers = searchByName ? filterUserByName(filteredUsers, searchByName) : filteredUsers;
+            console.log('Searched users', seachedUsers);
+            const sortedUsers = _.orderBy(seachedUsers, sortBy.path, sortBy.order);
             const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
             const countOfFilteredUsers = filteredUsers.length;
             return renderUsers(usersOnPage, countOfFilteredUsers);

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const TextField = ({ label, type, id, value, onChange, error }) => {
     return (
         <div className="mb-3">
-            <label htmlFor={id} className="form-label">{label}</label>
+            {label && <label htmlFor={id} className="form-label">{label}</label>}
             <input
                 className="form-control"
                 type={type}
