@@ -3,7 +3,7 @@ import TextField from './textField';
 
 const Login = () => {
     const [inputData, setInputData] = useState({ email: '', password: '' });
-    const [, setErrors] = useState();
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         validateInput();
@@ -16,7 +16,7 @@ const Login = () => {
 
     const handleInputData = ({ target }) => {
         setInputData((prevState) => ({
-            // ...prevState,
+            ...prevState,
             [target.id]: target.value
         }));
         console.log('Name', target.id, 'Value', target.value, isValidEmail(target.value));
@@ -26,7 +26,9 @@ const Login = () => {
         const errors = {};
         for (const fieldName in inputData) {
             if (inputData[fieldName].trim() === '') {
-                errors[fieldName] = `${fieldName} have to be filled`;
+                errors[fieldName] = `${fieldName} should not be empty`;
+            } else if (fieldName === 'email' && isValidEmail(inputData[fieldName]) === false) {
+                errors[fieldName] = `${fieldName} email does not match criteria 'your@email.com'`;
             }
         }
         setErrors(errors);
@@ -44,16 +46,20 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
                 <TextField
                     label='Email address'
-                    type='email'
+                    type='text'
                     id='email'
                     value={inputData.email}
-                    onChange={handleInputData}/>
+                    onChange={handleInputData}
+                    error={errors.email}
+                />
                 <TextField
-                    label='Email address'
+                    label='Password'
                     type='password'
                     id='password'
                     value={inputData.password}
-                    onChange={handleInputData}/>
+                    onChange={handleInputData}
+                    error={errors.password}
+                />
                 <button type="submit" className="btn btn-primary">Login</button>
             </form>
         </div>
