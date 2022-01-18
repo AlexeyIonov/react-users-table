@@ -6,11 +6,11 @@ import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import api from '../api';
 import UsersTable from './usersTable';
-import User from './user';
+import User from './userPage';
 import _ from 'lodash';
 import SearchUsers from './searchUsers';
 
-const Users = ({ match }) => {
+const UsersListPage = ({ match }) => {
     const pageSize = 8;
     const [users, setUsers] = useState();
     const [currentPage, setCurrentPage] = useState(1);
@@ -159,10 +159,10 @@ const Users = ({ match }) => {
     }
 };
 
-Users.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     match: PropTypes.object,
     onToggleBookmark: PropTypes.func
 };
 
-export default Users;
+export default UsersListPage;

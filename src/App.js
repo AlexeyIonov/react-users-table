@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import NavBar from './component/navBar';
-import Login from './component/login';
-import Users from './component/users';
-import Main from './component/main';
+import Login from './layouts/login';
+import Users from './layouts/users';
+import Main from './layouts/main';
 import NotFound from './component/notFound';
 
 function App() {

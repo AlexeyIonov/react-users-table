@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TextField from './textField';
 
-const Login = () => {
+const LoginForm = () => {
     const [inputData, setInputData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
 
@@ -66,4 +66,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginForm;

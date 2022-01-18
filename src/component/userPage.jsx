@@ -3,7 +3,7 @@ import Qualities from './qualities';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-const User = ({ user }) => {
+const UserPage = ({ user }) => {
     const history = useHistory();
     const handleUsersRoute = () => {
         history.push('/users');
@@ -33,8 +33,8 @@ const User = ({ user }) => {
     );
 };
 
-User.propTypes = {
+UserPage.propTypes = {
     user: PropTypes.object
 };
 
-export default User;
+export default UserPage;
