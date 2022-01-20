@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory} from 'react-router-dom';
 import api from '../api';
 import TextField from './textField';
 import SelectField from './common/form/selectField';
@@ -8,6 +8,10 @@ import MultiSelectField from './common/form/multiSelectField';
 import { validator } from '../utils/validator';
 
 const UserEditForm = () => {
+    const history = useHistory();
+    const handleUsersRoute = () => {
+        history.push('/users');
+    };
     const params = useParams();
     const userId = params.userId;
     const [data, setData] = useState();
@@ -97,15 +101,17 @@ const UserEditForm = () => {
             setData((prevState) => ({
                 ...prevState,
                 [target.name]: target.value
-            }));
+            }));            
             // console.log('UserEditForm::handleChange Name', target.name, 'Value', target.value, 'Target', target);
-        }
+        }        
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
+        api.users.update(userId, data);
+        handleUsersRoute();
         console.log('handleSubmit', data);
     };
 
