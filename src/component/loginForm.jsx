@@ -17,9 +17,9 @@ const LoginForm = () => {
     const handleInputData = ({ target }) => {
         setInputData((prevState) => ({
             ...prevState,
-            [target.id]: target.value
+            [target.name]: target.value
         }));
-        console.log('Name', target.id, 'Value', target.value, isValidEmail(target.value));
+        console.log('Name', target.name, 'Value', target.value, isValidEmail(target.value));
     };
 
     const validateInput = () => {
@@ -48,7 +48,7 @@ const LoginForm = () => {
                 <TextField
                     label='Email address'
                     type='text'
-                    id='email'
+                    name='email'
                     value={inputData.email}
                     onChange={handleInputData}
                     error={errors.email}
@@ -56,7 +56,7 @@ const LoginForm = () => {
                 <TextField
                     label='Password'
                     type='password'
-                    id='password'
+                    name='password'
                     value={inputData.password}
                     onChange={handleInputData}
                     error={errors.password}

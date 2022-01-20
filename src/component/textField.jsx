@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextField = ({ label, type, id, value, onChange, error }) => {
+const TextField = ({ label, type, name, value, onChange, error }) => {
     return (
         <div className="mb-3">
-            {label && <label htmlFor={id} className="form-label">{label}</label>}
+            {label && <label htmlFor={name} className="form-label">{label}</label>}
             <input
                 className="form-control"
                 type={type}
-                id={id}
+                name={name}
                 value={value}
                 onChange={onChange}/>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -19,7 +19,7 @@ const TextField = ({ label, type, id, value, onChange, error }) => {
 TextField.propTypes = {
     label: PropTypes.string,
     type: PropTypes.string,
-    id: PropTypes.string,
+    name: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
     error: PropTypes.string

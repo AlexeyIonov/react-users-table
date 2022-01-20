@@ -89,22 +89,24 @@ const UserEditForm = () => {
     const isValid = Object.keys(errors).length === 0;
 
     const handleChange = (target) => {
-        if (target?.name === 'qualities') {
-            const quals = target.value.map((opt) => ({
+        console.log('UserEditForm::handleChange', target);
+        if (target && target?.name === 'qualities') {
+            const quals = target?.value.map((opt) => ({
                 name: opt.label,
                 _id: opt.value,
                 color: opt.color
             }));
             console.log('qualities', quals);
             setData((prevState) => ({ ...prevState, qualities: quals }));
-        } else if (target?.name === 'profession') {
+        } else if (target && target?.name === 'profession') {
             const key = Object.keys(professions).filter((k) => professions[k]._id === target.value);
             setData((prevState) => ({ ...prevState, profession: { _id: target.value, name: professions[key].name } }));
-        } else {
+        } else if (target) {
             setData((prevState) => ({
                 ...prevState,
                 [target.name]: target.value
             }));
+            // console.log('UserEditForm::handleChange Name', target.name, 'Value', target.value, 'Target', target);
         }
     };
 
@@ -149,7 +151,7 @@ const UserEditForm = () => {
                             options={professions}
                             name='profession'
                             onChange={handleChange}
-                            value={data.profession ? data.profession._id : data.profession}
+                            value={data.profession._id}
                             error={errors.profession}
                         />
                         <MultiSelectField
