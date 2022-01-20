@@ -6,11 +6,13 @@ import UsersListPage from '../component/usersListPage';
 
 const Users = () => {
     const params = useParams();
-    const { userId } = params;    
+    const { userId } = params;
     const handleEditUser = (userId) => {
         console.log('handleEditUser', userId);
     };
-    return <>{userId ? <UserPage userId={userId} onEditUser={handleEditUser} /> : <UsersListPage />}</>;
+    return (
+        <>{userId ? <UserPage userId={userId} onEditUser={handleEditUser} /> : <UsersListPage />}</>
+    );
 };
 
 Users.propTypes = {
