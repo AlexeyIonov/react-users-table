@@ -5,6 +5,7 @@ import NavBar from './component/navBar';
 import Login from './layouts/login';
 import Users from './layouts/users';
 import Main from './layouts/main';
+import UserEditForm from './component/userEditForm';
 import NotFound from './component/notFound';
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
             <NavBar />
             <Switch>
                 <Route path='/' exact component={Main}/>
-                <Route path='/login' component={Login}/>
+                <Route path='/login/:type?' component={Login}/>
+                <Route path='/users/:userId?/edit' component={UserEditForm}/>
                 <Route path='/users/:userId?' component={Users}/>
                 <Route path='/404' component={NotFound}/>
                 <Redirect from='/admin' to='/users/:user?'/>

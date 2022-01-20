@@ -11,11 +11,12 @@ module.exports = {
         ecmaVersion: 13,
         sourceType: 'module'
     },
-    plugins: ['react'],
+    plugins: ['react'],    
     rules: {
         indent: ['error', 4],
         semi: [2, 'always'],
         quotes: [2, 'single', { avoidEscape: true }],
+        'multiline-ternary': ['off'],
         'space-before-function-paren': [
             'error',
             { anonymous: 'always', named: 'never' }

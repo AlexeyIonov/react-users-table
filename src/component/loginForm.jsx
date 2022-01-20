@@ -4,7 +4,7 @@ import TextField from './textField';
 const LoginForm = () => {
     const [inputData, setInputData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
-
+    const [isValid, setValid] = useState(false);
     useEffect(() => {
         validateInput();
     }, [inputData]);
@@ -28,16 +28,17 @@ const LoginForm = () => {
             if (inputData[fieldName].trim() === '') {
                 errors[fieldName] = `${fieldName} should not be empty`;
             } else if (fieldName === 'email' && isValidEmail(inputData[fieldName]) === false) {
-                errors[fieldName] = `${fieldName} email does not match criteria 'your@email.com'`;
+                errors[fieldName] = `${fieldName} does not match criteria 'your@email.com'`;
             }
         }
         setErrors(errors);
-        return Object.keys(errors).length === 0;
+        setValid(Object.keys(errors).length === 0);
+        return isValid;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const isValid = validateInput();
+        setValid(validateInput());
         console.log('Is vaild input', isValid);
     };
 
@@ -60,7 +61,12 @@ const LoginForm = () => {
                     onChange={handleInputData}
                     error={errors.password}
                 />
-                <button type="submit" className="btn btn-primary">Login</button>
+                <button
+                    type="submit"
+                    disabled={!isValid}
+                    className="btn btn-primary w-100 mx-auto">
+                    Login
+                </button>
             </form>
         </div>
     );

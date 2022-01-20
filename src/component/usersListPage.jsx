@@ -6,19 +6,18 @@ import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import api from '../api';
 import UsersTable from './usersTable';
-import User from './userPage';
 import _ from 'lodash';
 import SearchUsers from './searchUsers';
 
-const UsersListPage = ({ match }) => {
+const UsersListPage = () => {
     const pageSize = 8;
     const [users, setUsers] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProfession, setSelectedProfession] = useState();
     const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
-    const userId = match.params.userId;
-    const [userToRender, setUserToRender] = useState();
+    // const userId = match.params.userId;
+    // const [userToRender, setUserToRender] = useState();
     const [searchByName, setSearchByName] = useState();
 
     useEffect(() => {
@@ -27,11 +26,11 @@ const UsersListPage = ({ match }) => {
         });
     }, []);
 
-    useEffect(() => {
-        api.users.getById(userId).then((data) => {
-            setUserToRender(data);
-        });
-    }, [userId]);
+    // useEffect(() => {
+    //     api.users.getById(userId).then((data) => {
+    //         setUserToRender(data);
+    //     });
+    // }, [userId]);
 
     const handleDelete = (userId) => {
         setUsers((prevState) => prevState.filter((tag) => tag._id !== userId));
@@ -39,7 +38,6 @@ const UsersListPage = ({ match }) => {
 
     const handleToggleBookmark = (id) => {
         // console.log('handleToggleBookmark', id);
-
         const newUsers = users.map((user) => {
             if (user._id === id) {
                 user.bookmark === false
@@ -141,19 +139,14 @@ const UsersListPage = ({ match }) => {
     };
 
     if (users) {
-        if (userId) {
-            // console.log('UserId', userId, userToRender);
-            return <User user={userToRender}/>;
-        } else {
-            const filteredUsers =
-                selectedProfession ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)) : users;
-            const seachedUsers = searchByName ? filterUserByName(filteredUsers, searchByName) : filteredUsers;
-            console.log('Searched users', seachedUsers);
-            const sortedUsers = _.orderBy(seachedUsers, sortBy.path, sortBy.order);
-            const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
-            const countOfFilteredUsers = filteredUsers.length;
-            return renderUsers(usersOnPage, countOfFilteredUsers);
-        }
+        const filteredUsers =
+            selectedProfession ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProfession)) : users;
+        const seachedUsers = searchByName ? filterUserByName(filteredUsers, searchByName) : filteredUsers;
+        console.log('Searched users', seachedUsers);
+        const sortedUsers = _.orderBy(seachedUsers, sortBy.path, sortBy.order);
+        const usersOnPage = paginate(sortedUsers, currentPage, pageSize);
+        const countOfFilteredUsers = seachedUsers.length;
+        return renderUsers(usersOnPage, countOfFilteredUsers);
     } else {
         return <h1 className='d-flex justify-content-center'>Loading ...</h1>;
     }

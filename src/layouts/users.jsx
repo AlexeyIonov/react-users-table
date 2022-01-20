@@ -4,10 +4,13 @@ import { useParams } from 'react-router-dom';
 import UserPage from '../component/userPage';
 import UsersListPage from '../component/usersListPage';
 
-const Users = ({ match }) => {
+const Users = () => {
     const params = useParams();
-    const { userId } = params;
-    return <>{userId ? <UserPage userId={userId} /> : <UsersListPage match={match}/>}</>;
+    const { userId } = params;    
+    const handleEditUser = (userId) => {
+        console.log('handleEditUser', userId);
+    };
+    return <>{userId ? <UserPage userId={userId} onEditUser={handleEditUser} /> : <UsersListPage />}</>;
 };
 
 Users.propTypes = {
