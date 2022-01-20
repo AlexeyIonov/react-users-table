@@ -7,22 +7,6 @@ import RadioField from './common/form/radioField';
 import MultiSelectField from './common/form/multiSelectField';
 import { validator } from '../utils/validator';
 
-// const makeOptions = (params) => {
-//     console.log('makeOptions is array', Array.isArray(params), params);
-//     if (params === undefined) {
-//         return [{}];
-//     }
-//     const optionsArray =
-//     Array.isArray(params) ? params.map((opt) => ({
-//         label: params[opt].name,
-//         value: params[opt]._id
-//     })) : Object.keys(params).map((opt) => ({
-//         label: params[opt].name,
-//         value: params[opt]._id
-//     }));
-//     return optionsArray;
-// };
-
 const UserEditForm = () => {
     const params = useParams();
     const userId = params.userId;
@@ -35,32 +19,25 @@ const UserEditForm = () => {
         qualities: [],
         licence: false
     });
-
     const [qualities, setQualities] = useState({});
     const [professions, setProfession] = useState();
     const [errors, setErrors] = useState({});
-    const [user, setUser] = useState();
+
     useEffect(() => {
-        api.users.getById(userId).then((data) => setUser(data));
+        api.users.getById(userId).then((data) => setData(data));
         api.professions.fetchAll().then((data) => setProfession(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
-    useEffect(() => {
-        const quals = user?.qualities?.map((opt) => ({
-            label: opt.name,
-            value: opt._id,
-            color: opt.color
-        }));
-        if (user?.qualities && user?.qualities.length) {
-            setData({ ...user, qualities: quals });
-        }
-        console.log('UserEditForm setUser setData changed', user);
-    }, [user]);
-
-    useEffect(() => {
-        console.log('UserEditForm setData changed', data);
-    }, [data]);
+    const optionsArray = (options) => {
+        return !Array.isArray(options) && typeof options === 'object'
+            ? Object.keys(options).map((optionName) => ({
+                label: options[optionName].name,
+                value: options[optionName]._id,
+                color: options[optionName].color
+            }))
+            : options;
+    };
 
     useEffect(() => {
         validate();
@@ -111,24 +88,6 @@ const UserEditForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    // useEffect(() => {
-    //     const profs = user?.professions?.map((opt) => ({
-    //         label: opt.name,
-    //         value: opt._id
-    //     }));
-    //     setData({ ...user, professions: profs });
-    // }, [professions]);
-
-    // useEffect(() => {
-    //     if (qualities && qualities.length) {
-    //         const quals = data?.qualities?.map((opt) => ({
-    //             label: opt.name,
-    //             value: opt._id
-    //         }));
-    //         setData({ ...data, qualities: quals });
-    //     }
-    // }, [qualities]);
-
     const handleChange = (target) => {
         if (target?.name === 'qualities') {
             const quals = target.value.map((opt) => ({
@@ -153,7 +112,7 @@ const UserEditForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log('handleSubmit', e);
+        console.log('handleSubmit', data);
     };
 
     return (
@@ -194,10 +153,10 @@ const UserEditForm = () => {
                             error={errors.profession}
                         />
                         <MultiSelectField
-                            options={qualities}
+                            options={optionsArray(qualities)}
                             onChange={handleChange}
                             // defaultValue={[{label: 'Нудила', value: '67rdca3eeb7f6fgeed471198'}, {label: 'Троль', value: '67rdca3eeb7f6fgeed4711012'}]}
-                            defaultValue={data.qualities}
+                            defaultValue={optionsArray({ ...data.qualities })}
                             name='qualities'
                             label='Выберите ваши качества'
                         />
