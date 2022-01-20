@@ -10,15 +10,7 @@ import { validator } from '../utils/validator';
 const UserEditForm = () => {
     const params = useParams();
     const userId = params.userId;
-    const [data, setData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        profession: {},
-        sex: 'male',
-        qualities: [],
-        licence: false
-    });
+    const [data, setData] = useState();
     const [qualities, setQualities] = useState({});
     const [professions, setProfession] = useState();
     const [errors, setErrors] = useState({});
