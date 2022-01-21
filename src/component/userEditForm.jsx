@@ -5,7 +5,7 @@ import TextField from './textField';
 import SelectField from './common/form/selectField';
 import RadioField from './common/form/radioField';
 import MultiSelectField from './common/form/multiSelectField';
-import { validator } from '../utils/validator';
+import { validatorConfig, validator } from '../utils/validator';
 
 const UserEditForm = () => {
     const history = useHistory();
@@ -25,6 +25,10 @@ const UserEditForm = () => {
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
+    useEffect(() => {
+        validate();
+    }, [data]);
+
     const optionsArray = (options) => {
         return !Array.isArray(options) && typeof options === 'object'
             ? Object.keys(options).map((optionName) => ({
@@ -33,52 +37,6 @@ const UserEditForm = () => {
                 color: options[optionName].color
             }))
             : options;
-    };
-
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const validatorConfig = {
-        name: {
-            isRequired: {
-                message: 'Имя не должно быть пустым'
-            }
-        },
-        email: {
-            isRequired: {
-                message: 'Электронная почта обязательна для заполнения'
-            },
-            isEmail: {
-                message: 'Email введен некорректно'
-            }
-        },
-        password: {
-            isRequired: {
-                message: 'Пароль обязателен для заполнения'
-            },
-            isCapitalSymbol: {
-                message: 'Пароль должен содержать хотя бы одну заглавную букву'
-            },
-            isContainDigit: {
-                message: 'Пароль должен содержать хотя бы одно число'
-            },
-            min: {
-                message: 'Пароль должен состоять минимум из 8 символов',
-                value: 8
-            }
-        },
-        profession: {
-            isRequired: {
-                message: 'Обязательно выберите вашу профессию'
-            }
-        },
-        licence: {
-            isRequired: {
-                message:
-                    'Вы не можете использовать наш сервис без подтверждения лицензионного соглашения'
-            }
-        }
     };
 
     const validate = () => {
@@ -160,7 +118,6 @@ const UserEditForm = () => {
                         <MultiSelectField
                             options={optionsArray(qualities)}
                             onChange={handleChange}
-                            // defaultValue={[{label: 'Нудила', value: '67rdca3eeb7f6fgeed471198'}, {label: 'Троль', value: '67rdca3eeb7f6fgeed4711012'}]}
                             defaultValue={optionsArray({ ...data.qualities })}
                             name='qualities'
                             label='Выберите ваши качества'

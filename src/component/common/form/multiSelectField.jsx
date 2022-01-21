@@ -3,8 +3,8 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 
 const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
-    console.log('MultiSelectField options', options);
-    console.log('MultiSelectField defaultValue', defaultValue);
+    // console.log('MultiSelectField options', options);
+    // console.log('MultiSelectField defaultValue', defaultValue);
     const handleChange = (value) => {
         onChange({ name: name, value });
     };
