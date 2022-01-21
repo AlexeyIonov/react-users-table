@@ -37,6 +37,12 @@ export const validatorConfig = {
             message:
                 'Вы не можете использовать наш сервис без подтверждения лицензионного соглашения'
         }
+    },
+    qualities: {
+        length: {
+            message: 'Нужно выбрать хотя бы одно качество',
+            value: 1
+        }
     }
 };
 
@@ -54,7 +60,6 @@ export function validator(data, config) {
             break;
         }
         case 'isEmail': {
-            // const emailRegExp = /^\S+@\S+\.\S+$/g;
             const emailRegExp = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g;
             statusValidate = !emailRegExp.test(data);
             break;
@@ -70,7 +75,15 @@ export function validator(data, config) {
             break;
         }
         case 'min': {
-            statusValidate = data.length < config.value;
+            console.log('validator min', data, data.length);
+            statusValidate = (data.length < config.value);
+            console.log('validator min status', statusValidate);
+            break;
+        }
+        case 'length': {
+            console.log('validator length', data, data.length);
+            statusValidate = (data.length <= config.value);
+            console.log('validator length status', statusValidate);
             break;
         }
         default:

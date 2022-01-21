@@ -18,7 +18,8 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
             <div className='input-group has-validation'>
                 <input
                     className={getInputClasses()}
-                    type={type}
+                    type={showPassword ? 'text' : type}
+                    id={name}
                     name={name}
                     value={value}
                     onChange={handleChange}/>
@@ -31,7 +32,7 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
                         <i className={ 'bi bi-eye' + (showPassword ? '-slash' : '') }></i>
                     </button>
                 )}
-                {error && <div className="invalid-feedback">{error}</div>}
+                {error && <div className='invalid-feedback'>{error}</div>}
             </div>
         </div>
     );

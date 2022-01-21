@@ -26,7 +26,8 @@ const UserEditForm = () => {
     }, []);
 
     useEffect(() => {
-        validate();
+        setIsValid(validate());
+        console.log('Errors', errors);
     }, [data]);
 
     const optionsArray = (options) => {
@@ -39,13 +40,18 @@ const UserEditForm = () => {
             : options;
     };
 
+    const hasErrors = () => {
+        return Object.keys(errors).length > 0;
+    };
+
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
-        return Object.keys(errors).length === 0;
+        const isValid = !hasErrors();
+        return isValid;
     };
 
-    const isValid = Object.keys(errors).length === 0;
+    const [isValid, setIsValid] = useState(!hasErrors());
 
     const handleChange = (target) => {
         console.log('UserEditForm::handleChange', target);
@@ -59,7 +65,9 @@ const UserEditForm = () => {
             setData((prevState) => ({ ...prevState, qualities: quals }));
         } else if (target && target?.name === 'profession') {
             const key = Object.keys(professions).filter((k) => professions[k]._id === target.value);
-            setData((prevState) => ({ ...prevState, profession: { _id: target.value, name: professions[key].name } }));
+            if (key) {
+                setData((prevState) => ({ ...prevState, profession: { _id: target.value, name: professions[key].name } }));
+            }
         } else if (target) {
             setData((prevState) => ({
                 ...prevState,
@@ -71,7 +79,9 @@ const UserEditForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
-        if (!isValid) return;
+        if (!isValid) {
+            return;
+        }
         api.users.update(userId, data);
         handleUsersRoute();
         console.log('handleSubmit', data);
@@ -102,7 +112,7 @@ const UserEditForm = () => {
                             label='Пароль'
                             type='password'
                             name='password'
-                            value={data.password}
+                            value={data.password ? data.password : ''}
                             onChange={handleChange}
                             error={errors.password}
                         />
@@ -121,6 +131,7 @@ const UserEditForm = () => {
                             defaultValue={optionsArray({ ...data.qualities })}
                             name='qualities'
                             label='Выберите ваши качества'
+                            error={errors.qualities}
                         />
                         <RadioField
                             options={[
