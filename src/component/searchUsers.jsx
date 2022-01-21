@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 const SearchUsers = ({ onSearch }) => {
     const [searchUser, setSearchUser] = useState({ name: '' });
 
-    const handleChange = ({ target }) => {
+    const handleChange = (target) => {
         setSearchUser((prevState) => ({
             ...prevState,
-            [target.id]: target.value
+            [target.name]: target.value
         }));
         onSearch(target.value);
-        console.log('SearchUsers => handleChange:', 'name', target.id, 'value', target.value);
+        console.log('SearchUsers => handleChange:', 'name', target.name, 'value', target.value);
     };
 
     return (
@@ -19,7 +19,7 @@ const SearchUsers = ({ onSearch }) => {
             <TextField
                 label=''
                 type='text'
-                id='name'
+                name='name'
                 value={searchUser.name}
                 onChange={handleChange}
                 error={''}
