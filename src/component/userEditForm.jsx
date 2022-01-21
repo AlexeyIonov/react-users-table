@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory} from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import api from '../api';
 import TextField from './textField';
 import SelectField from './common/form/selectField';
@@ -40,6 +40,11 @@ const UserEditForm = () => {
     }, [data]);
 
     const validatorConfig = {
+        name: {
+            isRequired: {
+                message: 'Имя не должно быть пустым'
+            }
+        },
         email: {
             isRequired: {
                 message: 'Электронная почта обязательна для заполнения'
@@ -101,9 +106,8 @@ const UserEditForm = () => {
             setData((prevState) => ({
                 ...prevState,
                 [target.name]: target.value
-            }));            
-            // console.log('UserEditForm::handleChange Name', target.name, 'Value', target.value, 'Target', target);
-        }        
+            }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -124,6 +128,7 @@ const UserEditForm = () => {
                         <TextField
                             label='Имя'
                             name='name'
+                            type='text'
                             value={data.name}
                             onChange={handleChange}
                             error={errors.name}
@@ -135,14 +140,14 @@ const UserEditForm = () => {
                             onChange={handleChange}
                             error={errors.email}
                         />
-                        {/* <TextField
+                        <TextField
                             label='Пароль'
                             type='password'
                             name='password'
                             value={data.password}
                             onChange={handleChange}
                             error={errors.password}
-                        /> */}
+                        />
                         <SelectField
                             label='Выбери свою профессию'
                             defaultOption='Choose...'
