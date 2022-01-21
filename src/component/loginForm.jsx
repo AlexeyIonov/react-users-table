@@ -14,7 +14,7 @@ const LoginForm = () => {
         return regExp.test(email);
     };
 
-    const handleInputData = ({ target }) => {
+    const handleInputData = (target) => {
         setInputData((prevState) => ({
             ...prevState,
             [target.name]: target.value
