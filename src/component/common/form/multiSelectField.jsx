@@ -11,7 +11,7 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue, error 
     return (
         <div className='mb-4'>
             <label className='form-label'>{label}</label>
-            <div>
+            <div className='input-group has-validation'>
                 <Select
                     isMulti
                     closeMenuOnSelect={false}

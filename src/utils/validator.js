@@ -39,7 +39,7 @@ export const validatorConfig = {
         }
     },
     qualities: {
-        length: {
+        min: {
             message: 'Нужно выбрать хотя бы одно качество',
             value: 1
         }
@@ -78,12 +78,6 @@ export function validator(data, config) {
             console.log('validator min', data, data.length);
             statusValidate = (data.length < config.value);
             console.log('validator min status', statusValidate);
-            break;
-        }
-        case 'length': {
-            console.log('validator length', data, data.length);
-            statusValidate = (data.length <= config.value);
-            console.log('validator length status', statusValidate);
             break;
         }
         default:

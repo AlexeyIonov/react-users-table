@@ -26,8 +26,7 @@ const UserEditForm = () => {
     }, []);
 
     useEffect(() => {
-        setIsValid(validate());
-        console.log('Errors', errors);
+        validate();
     }, [data]);
 
     const optionsArray = (options) => {
@@ -40,18 +39,13 @@ const UserEditForm = () => {
             : options;
     };
 
-    const hasErrors = () => {
-        return Object.keys(errors).length > 0;
-    };
-
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
-        const isValid = !hasErrors();
-        return isValid;
+        return Object.keys(errors).length === 0;
     };
 
-    const [isValid, setIsValid] = useState(!hasErrors());
+    const isValid = Object.keys(errors).length === 0;
 
     const handleChange = (target) => {
         console.log('UserEditForm::handleChange', target);
